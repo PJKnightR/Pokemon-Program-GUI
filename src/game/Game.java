@@ -15,8 +15,8 @@ public class Game {
     private Player user;
     private int battleChance;
 
-    public JPanel contentPane = PokemonMain.contentPane;
-    public JFrame frame = PokemonMain.frame;
+    public JPanel contentPane = null;
+    public JFrame frame = null;
     public ActionHandler actionHandler = new ActionHandler();
     private JTextField trainer = new JTextField("What is your name?");
     private JLabel option = new JLabel ("What would you like to do?");
@@ -31,6 +31,7 @@ public class Game {
     private JButton cont2 = new JButton("Continue");
 
     public Game(){
+        /*
         actionHandler.getGame(this);
         explore.addActionListener(actionHandler);
         explore.setActionCommand("Explore");
@@ -50,7 +51,7 @@ public class Game {
         cont2.setActionCommand("Continue2");
         Type.initializeTypes();
         running = true;
-        battleChance = 75;
+        battleChance = 75; */
     }
 
     public void getUserInfo(){
@@ -58,16 +59,16 @@ public class Game {
         JLabel welcomeMsg = new JLabel ("Welcome to the world of Pokemon.  I am the Pokemon Professor Oak.  Before we begin can you tell us your name and what Pokemon you would like to start with?");
         JLabel beg = new JLabel("Choose your beginner by clicking the appropriate button below");
         JButton beginner1 = new JButton("Bulbasaur");
-        beginner1.addActionListener(actionHandler);
+      //  beginner1.addActionListener(actionHandler);
         beginner1.setActionCommand("Bulbasaur");
         JButton beginner2 = new JButton("Charmander");
-        beginner2.addActionListener(actionHandler);
+        //beginner2.addActionListener(actionHandler);
         beginner2.setActionCommand("Charmander");
         JButton beginner3 = new JButton("Squirtle");
-        beginner3.addActionListener(actionHandler);
+      //  beginner3.addActionListener(actionHandler);
         beginner3.setActionCommand("Squirtle");
         JButton cont = new JButton("Continue");
-        cont.addActionListener(actionHandler);
+        //cont.addActionListener(actionHandler);
         cont.setActionCommand("Continue");
 
         contentPane.add(welcomeMsg);
@@ -86,7 +87,7 @@ public class Game {
     public void createUser(){
         trainerName = trainer.getText();
         Pokedex pokedex = new Pokedex();
-        Player user = new Player(trainerName, typ, this);
+        //Player user = new Player(trainerName, typ, this);
         actionHandler.getUser(user);
         actionHandler.getPokedex(pokedex);
     }
@@ -174,7 +175,7 @@ public class Game {
                 break;
             case 5:
                 location = new JLabel("You found a Pokemon Center!\nYour party was fully healed");
-                user.healAll();
+               // user.healAll();
                 break;
             case 6:
                 System.out.println("You found a lake!");

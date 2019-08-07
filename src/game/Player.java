@@ -5,9 +5,6 @@ import pokemon.Pokemon;
 import javax.swing.*;
 import java.util.Scanner;
 
-import static game.PokemonMain.contentPane;
-import static game.PokemonMain.frame;
-
 public class Player{
         private double expTrainer, toLevelUp, toLevelUpPokemon;
         private int pokedollars, level = 1, ID;
@@ -30,7 +27,7 @@ public class Player{
 
         public Player(String trainerName, int typ, Game game){
             actionHandler = game.getActionHandler();
-            back.addActionListener(actionHandler);
+            //back.addActionListener(actionHandler);
             back.setActionCommand("Back");
 
             name = trainerName;
@@ -58,9 +55,9 @@ public class Player{
 
         void getAllStats(Game game){
             JLabel allStats = new JLabel("Name: " + name + "\nTrainer Level: " + this.getTrainerLevel() + "\nTo next level: " + this.getExp() + "/" + this.getToLevelUp() + "\nPokedollars: $" + this.getPokedollars());
-            game.display(frame, contentPane);
-            contentPane.add(allStats);
-            contentPane.add(back);
+           // game.display(frame, contentPane);
+           // contentPane.add(allStats);
+           // contentPane.add(back);
         }
 
         public String getName(){

@@ -44,7 +44,7 @@ public abstract class Shop {
         }
         choiceNum = Byte.parseByte(choice);
         if (choiceNum == -1){
-            game.displayOptionsMenu();
+           // game.displayOptionsMenu();
         } else if (user.getPokedollars() >= shopList.get(choiceNum - 1).getValue()){
             user.spendPokedollars(shopList.get(choiceNum - 1).getValue());
             System.out.println("You got a " + shopList.get(choiceNum - 1).getItemName() + "!");
