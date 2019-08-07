@@ -5,7 +5,6 @@ import pokemon.Pokemon;
 import javax.swing.*;
 import java.util.Scanner;
 
-
 public class Player{
         private double expTrainer, toLevelUp, toLevelUpPokemon;
         private int pokedollars, level = 1, ID;
@@ -13,7 +12,10 @@ public class Player{
         Pokemon party [] = new Pokemon [6];
         Pokemon storage [] = new Pokemon[120];
         Inventory inventory = new Inventory();
+        public Pokedex playerDex;
         public Scanner scan = new Scanner(System.in);
+        public JButton back = new JButton("Back");
+        public ActionHandler actionHandler;
 
         public Inventory getInventory(){
             return inventory;
@@ -23,20 +25,24 @@ public class Player{
             return party;
         }
 
-        public Player(String trainerName, int typ, Pokedex pokedex){
+        public Player(String trainerName, int typ, Game game){
+            actionHandler = game.getActionHandler();
+            //back.addActionListener(actionHandler);
+            back.setActionCommand("Back");
+
             name = trainerName;
+            playerDex = new Pokedex();
             Pokemon beginner = Pokemon.beginnerPokemon(typ - 1);
             party [0] = beginner;
-            pokedex.addPokemon(party[0].getPokeNum());
+            playerDex.addPokemon(party[0].getPokeNum());
             party[0].setExperience(0);
-            party[0].setHealth(beginner.getHealthPoints());
+            party[0].setHealthLeft((int)beginner.getHealth());
             storage [0] = beginner;
-            Pokemon empty = Pokemon.emptySlot();
-            party [1] = empty;
-            party [2] = empty;
-            party [3] = empty;
-            party [4] = empty;
-            party [5] = empty;
+            party [1] = Pokemon.emptySlot();
+            party [2] = Pokemon.emptySlot();
+            party [3] = Pokemon.emptySlot();
+            party [4] = Pokemon.emptySlot();
+            party [5] = Pokemon.emptySlot();
             ID = 0;
             expToLevelUp();
             expToLevelUpPokemon(0);
@@ -50,7 +56,7 @@ public class Player{
         void getAllStats(Game game){
             JLabel allStats = new JLabel("Name: " + name + "\nTrainer Level: " + this.getTrainerLevel() + "\nTo next level: " + this.getExp() + "/" + this.getToLevelUp() + "\nPokedollars: $" + this.getPokedollars());
            // game.display(frame, contentPane);
-            //contentPane.add(allStats);
+           // contentPane.add(allStats);
            // contentPane.add(back);
         }
 
@@ -186,7 +192,7 @@ public class Player{
 
         }
 
-        public void gainExperiencePokemon(int currentID, Pokedex pokedex){ //needs actual expMax calculations, needs changed in the event of multiple level ups at once, wont happen now cause set exp
+        public void gainExperiencePokemon(int currentID){ //needs actual expMax calculations, needs changed in the event of multiple level ups at once, wont happen now cause set exp
             if (party[currentID].getLevel() < 100){
                 party[currentID].setExperience(party[currentID].getExperience() + 100);
                 if (party[currentID].getExperience() >= toLevelUpPokemon){
@@ -196,7 +202,7 @@ public class Player{
                     party[currentID].setSpecialAttack(((party[currentID].getBaseSpAtk() * 2 + party[currentID].getSpAtkIV() + party[currentID].getSpAtkEV() / 4) * party[currentID].getLevel() / 100 + 5) * party[currentID].nat.getSpAtkBonus());
                     party[currentID].setSpecialDefense(((party[currentID].getBaseSpDef() * 2 + party[currentID].getSpDefIV() + party[currentID].getSpDefEV() / 4) * party[currentID].getLevel() / 100 + 5) * party[currentID].nat.getSpDefBonus());
                     party[currentID].setSpeed(((party[currentID].getBaseSpd() * 2 + party[currentID].getSpdIV() + party[currentID].getSpdEV() / 4) * party[currentID].getLevel() / 100 + 5) * party[currentID].nat.getSpdBonus());
-                    party[currentID].setHealth(((party[currentID].getBaseHp() * 2 + party[currentID].getHpIV() + party[currentID].getHpEV() / 4) * party[currentID].getLevel() / 100 + 5));
+                    party[currentID].setHealth((int)((party[currentID].getBaseHp() * 2 + party[currentID].getHpIV() + party[currentID].getHpEV() / 4) * party[currentID].getLevel() / 100 + 5));
                     party[currentID].setHP(party[currentID].getHealth());
                     expToLevelUpPokemon(currentID);
                     System.out.println(party[currentID].getName() + " leveled up to level " + party[currentID].getLevel());
@@ -212,7 +218,7 @@ public class Player{
                         party[currentID].setCurrentAtt(0);
                     }
                     party[currentID].setPokeNum(evolution.getPokeNum());
-                    pokedex.addPokemon(party[currentID].getPokeNum());
+                    this.playerDex.addPokemon(party[currentID].getPokeNum());
                     party[currentID].setEvolution(evolution.getEvolution());
                     party[currentID].setLevEv(evolution.getLevEv());
                     party[currentID].type = evolution.getElementType();
@@ -228,7 +234,7 @@ public class Player{
                     party[currentID].setSpecialAttack(((party[currentID].getBaseSpAtk() * 2 + party[currentID].getSpAtkIV() + party[currentID].getSpAtkEV() / 4) * party[currentID].getLevel() / 100 + 5) * party[currentID].nat.getSpAtkBonus());
                     party[currentID].setSpecialDefense(((party[currentID].getBaseSpDef() * 2 + party[currentID].getSpDefIV() + party[currentID].getSpDefEV() / 4) * party[currentID].getLevel() / 100 + 5) * party[currentID].nat.getSpDefBonus());
                     party[currentID].setSpeed(((party[currentID].getBaseSpd() * 2 + party[currentID].getSpdIV() + party[currentID].getSpdEV() / 4) * party[currentID].getLevel() / 100 + 5) * party[currentID].nat.getSpdBonus());
-                    party[currentID].setHealth(((party[currentID].getBaseHp() * 2 + party[currentID].getHpIV() + party[currentID].getHpEV() / 4) * party[currentID].getLevel() / 100 + 5));
+                    party[currentID].setHealth((int)((party[currentID].getBaseHp() * 2 + party[currentID].getHpIV() + party[currentID].getHpEV() / 4) * party[currentID].getLevel() / 100 + 5));
                     party[currentID].setHP(party[currentID].getHealth());
                     party[currentID].attLevel = evolution.attLevel;
                     party[currentID].atts = evolution.atts;
@@ -313,7 +319,7 @@ public class Player{
                             System.out.println("Special Attack: " + party[c].getSpecialAttack());
                             System.out.println("Special Defense: " + party[c].getSpecialDefense());
                             System.out.println("Speed: " + party[c].getSpeed());
-                            System.out.println("HP: " + party[c].getHealth() + "/" + party[c].getHealthPoints());
+                            System.out.println("HP: " + party[c].getHealth() + "/" + party[c].getHealth());
                             System.out.println("EXP: " + party[c].getExperience() + " / " + toLevelUpPokemon);
                             System.out.println("Enter -1 to go back.");
                             int k = scan.nextInt();
@@ -374,7 +380,7 @@ public class Player{
         //}
         */
         void healAll(){
-            party[0].setHealth(party[0].getHealthPoints());
+            party[0].setHealthLeft((int)party[0].getHealth());
         }
 
         private int getTrainerLevel(){

@@ -3,7 +3,7 @@ package game;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ActionHandler implements ActionListener{
+public class ActionHandler /*implements ActionListener*/{
 
     private Game game;
     private Player user;
@@ -26,6 +26,7 @@ public class ActionHandler implements ActionListener{
         bat = b;
     }
 
+    /*
     public void actionPerformed(ActionEvent event) {
         String eventName = event.getActionCommand();
         if (eventName.equals("Continue")) {
@@ -69,5 +70,5 @@ public class ActionHandler implements ActionListener{
         } else if (eventName.equals("Continue3")){
             bat.battle(user, game, pokedex);
         }
-    }
+    } */
 }

@@ -52,7 +52,7 @@ public class GUI {
                 type=2;
             if(type!=-1) {
                 Type.initializeTypes();
-                menu(new Player(name.getText(), type, new Pokedex()));
+                menu(new Player(name.getText(), type, new Game()));
             }
         });
 

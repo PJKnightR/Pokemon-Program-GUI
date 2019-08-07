@@ -6,7 +6,7 @@ import type.TypePoison;
 
 public class PokemonArbok extends Pokemon{
     public PokemonArbok(int lev){
-        name = "Ekans";
+        name = "Arbok";
         //id = 2;
         pokeNum = 24;
         evolution = null;
