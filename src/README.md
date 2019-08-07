@@ -6,7 +6,8 @@
     Version 1.1.02 The Grand Return and Cleanup Update
     -Added a variable in player for their Pokedex
     -Added a loop to game class to reduce method calls
-    -Restructured the methods in battle based on the RPG_Game
+    -Added poisoned and paralyzed status effects
+    -Restructured the methods in Battle & Game based on the RPG_Game
     -Removed all unnecessary Pokedex calls in Battle, Player, Game, Shop, and Inventory
     -Removed unnecessary game calls from battle
     -Changed method names in Pokemon for simplification

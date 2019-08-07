@@ -6,7 +6,7 @@ public abstract class Attack {
     protected String name, description;
     protected Type type;
     protected boolean physical;
-    protected int power, accuracy, powerpoints;
+    protected int power, accuracy, powerpoints, poisonChance, paralyzChance;
 
     public String getAttackName(){
         return name;
@@ -38,5 +38,13 @@ public abstract class Attack {
 
     public int getPowerPoints(){
         return powerpoints;
+    }
+
+    public int getPoisonChance(){
+        return poisonChance;
+    }
+
+    public int getParalyzChance(){
+        return paralyzChance;
     }
 }

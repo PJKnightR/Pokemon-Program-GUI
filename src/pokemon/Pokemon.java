@@ -46,6 +46,10 @@ public abstract class Pokemon{
 
     public double getHealth() { return hpMax; }
 
+    public void setHealth(int i){
+        hpMax = i;
+    }
+
     /**
      * This method gets Health Left
      */

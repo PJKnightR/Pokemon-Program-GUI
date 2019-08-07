@@ -30,12 +30,14 @@ public class Inventory {
         stackItem();
     }
 
-    public void useItem(Player user, Battle bat, Pokemon wild, Game game){ //need methods during and not during battle
-        int position = 0;
+    public void useItem(Player user, Battle bat, Pokemon wild){ //need methods during and not during battle
+        Scanner scan = new Scanner(System.in);
         int caught;
+        int position = 0;
         if (itemList.size() == 0){
             System.out.println("No items in Inventory");
             position = -1;
+            bat.playerMove(user);
         }
         while(position != -1){
             System.out.println("What item do you want to use?");
@@ -44,7 +46,7 @@ public class Inventory {
             position = scan.nextInt();
             switch(position){
                 case -1:
-                    bat.playerPhase(user, game);
+                    bat.playerMove(user);
                     break;
                 case -2:
                     System.out.println("Enter the item number, not the item name!");
@@ -52,41 +54,17 @@ public class Inventory {
                 default:
                     position--;
                     try{
-                        caught = itemList.get(position).use(user); //something around here is broken
+                        itemList.get(position).use(user);
                     } catch (IndexOutOfBoundsException blarg){
                         System.out.println("No item in that slot");
                         break;
                     }
                     removeItems();
                     position = -1;
-                    if (caught == 1){
-                        System.out.println("The wild " + wild.getName() + " was caught!");
-                        int id = user.getNewID();
-                        int c = 0;
-                        while (c < 5){
-                            if (user.party[c].getName().equals("Empty")){
-                                user.party[c] = wild;
-                                c = 5;
-                            }
-                            c++;
-                        }
-                        user.party[id].setLevel(wild.getLevel());
-                        user.party[id].setExperience(0);
-                        user.storage[id] = wild;
-                        user.party[id].setHealth(user.party[id].getHealthPoints());
-                        user.playerDex.addPokemon(user.party[id].getPokeNum() + 1);
-                        //PC.addPokemon(wild);
-                        game.displayOptionsMenu();
-                        break;
-                    } else if (caught == -1) {
-                        System.out.println(wild.getName() + " escaped the ball!");
-                        bat.wildAttack(user, game);
-                    } else {
-                        bat.wildAttack(user, game);
-                    }
+                    //check if a pokeball is used
+                    //then the enemy will do stuff
             }
         }
-        bat.wildAttack(user, game);
     }
 
     public void listItemsOutside(){
