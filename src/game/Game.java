@@ -10,6 +10,11 @@ import java.util.Scanner;
 public class Game {
     public String trainerName;
     public int typ;
+    private boolean running;
+    private Scanner scan = new Scanner(System.in);
+    private Player user;
+    private int battleChance;
+
     public JPanel contentPane = PokemonMain.contentPane;
     public JFrame frame = PokemonMain.frame;
     public ActionHandler actionHandler = new ActionHandler();
@@ -44,6 +49,8 @@ public class Game {
         cont2.addActionListener(actionHandler);
         cont2.setActionCommand("Continue2");
         Type.initializeTypes();
+        running = true;
+        battleChance = 75;
     }
 
     public void getUserInfo(){
@@ -79,12 +86,12 @@ public class Game {
     public void createUser(){
         trainerName = trainer.getText();
         Pokedex pokedex = new Pokedex();
-        Player user = new Player(trainerName, typ, pokedex, this);
+        Player user = new Player(trainerName, typ, this);
         actionHandler.getUser(user);
         actionHandler.getPokedex(pokedex);
     }
 
-    public void displayOptionsMenu(){
+    /*public void displayOptionsMenu(){
         display(frame, contentPane);
         contentPane.add(option);
         contentPane.add(explore);
@@ -96,62 +103,84 @@ public class Game {
         contentPane.add(quit);
     }
 
-    public void adventure(Player user, Pokedex pokedex){
+    public void adventure(Player user){
         double c;
         c = Math.random() * 100;
         c = Math.round(c);
         if (c <= 75){
-            new Battle().startBattle(user, this, pokedex);
+            new Battle().startBattle(user);
         } else if (c >= 76 && c <= 100){
-            getLocation(user, pokedex);
+            getLocation(user);
+        }
+    }*/
+
+    public void runGame(){
+        while(running){
+            String choice;
+            int c;
+
+            while(running){
+                choice = scan.next();
+                while (!choice.equals("1") && !choice.equals("2")){
+                    System.out.println("Please enter a valid option");
+                    choice = scan.next();
+                }
+                c = Integer.parseInt(choice);
+                if(c == 1){
+                    int g = getChance();
+                    if (g <= battleChance){
+                        Battle batbat = new Battle();
+                        batbat.startBattle(user, scan, true);
+                    } else {
+                        getEvent(user);
+                    }
+                    if (user.party[0].getHealthLeft() <= 0) {
+                        System.out.print("\n\n\t\tGAME\tOVER\n\n\n");
+                        running = false;
+                    }
+                } else {
+                    //playerMenu();
+                }
+                if (running){
+                    System.out.println("Enter '1' to continue your adventure! Enter '2' to go to the menu.");
+                }
+            }
+            scan.nextLine();
+            runGame();
         }
     }
 
-    public void getLocation(Player user, Pokedex pokedex){
-        double l = 1 + Math.random() * (5 - 1);
-        int j = (int) l;
-
+    private void getEvent(Player user){
+        double l = 1 + Math.random() * (6 - 1);
+        int j = (int) Math.round(l);
 
         switch (j){
             case 1:
-                location = new JLabel("You found a town!");
-                user.getInventory().addRandomItem();
+                location = new JLabel("You found a mart!");
+                Shop shop = new ShopMart();
+                shop.shop(user, this);
                 break;
             case 2:
-                location = new JLabel("You found a forest!");
+                System.out.println("You found a forest!");
                 user.getInventory().addRandomItem();
                 break;
             case 3:
-                location = new JLabel("You found a cave!");
+                System.out.println("You found a cave!");
                 user.getInventory().addRandomItem();
                 break;
             case 4:
-                location = new JLabel("You found a mart!");
-                Shop shop = new ShopMart();
-                shop.shop(user, pokedex, this);
+                System.out.println("You found a river!");
+                user.getInventory().addRandomItem();
                 break;
             case 5:
                 location = new JLabel("You found a Pokemon Center!\nYour party was fully healed");
                 user.healAll();
-                //System.out.println("Would you like to access the PC? Enter 1 for yes, 2 for no");
-                //Scanner scan = new Scanner(System.in);
-                //int pc = scan.nextInt();
-                //while (pc == 1 || pc == 2){
-                //if (pc == 1){
-                //cp.addPokemon();
-                ///} else {
-
-                //}
-                //}
                 break;
             case 6:
-                location = new JLabel("You found a lake!");
+                System.out.println("You found a lake!");
                 user.getInventory().addRandomItem();
                 break;
         }
-        display(frame, contentPane);
-        contentPane.add(location);
-        contentPane.add(cont2);
     }
 
     public static void display(JFrame frame, JPanel contentPane) {
@@ -175,5 +204,15 @@ public class Game {
             return false;
         }
         return true;
+    }
+
+    private int getChance(){
+        double chance;
+        int i;
+
+        chance = Math.random() * 100;
+        i = (int) Math.round(chance);
+
+        return i;
     }
 }

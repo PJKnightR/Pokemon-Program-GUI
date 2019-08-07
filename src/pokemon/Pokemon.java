@@ -44,14 +44,17 @@ public abstract class Pokemon{
         this.levEv = levEv;
     }
 
-    public double getHealth(){
+    public double getHealth() { return hpMax; }
+
+    /**
+     * This method gets Health Left
+     */
+    public double getHealthLeft() {
         return hp;
     }
 
-    public void setHealth(double hp){
-        this.hp = hp;
-        if(this.hp > hpMax)
-            this.hp = hpMax;
+    public void setHealthLeft(int i){
+        hp = i;
     }
 
     public double getExperience(){ return exp; }
@@ -104,10 +107,6 @@ public abstract class Pokemon{
 
     public void setSpeed(double s){
         spd = s;
-    }
-
-    public double getHealthPoints(){
-        return(hpMax);
     }
 
     public void setHP(double hp){

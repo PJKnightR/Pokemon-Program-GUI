@@ -3,6 +3,15 @@
 
     Version History Beta:
 
+    Version 1.1.02 The Grand Return and Cleanup Update
+    -Added a variable in player for their Pokedex
+    -Added a loop to game class to reduce method calls
+    -Restructured the methods in battle based on the RPG_Game
+    -Removed all unnecessary Pokedex calls in Battle, Player, Game, Shop, and Inventory
+    -Removed unnecessary game calls from battle
+    -Changed method names in Pokemon for simplification
+    -Fixed a bug where Arbok's name was Ekans
+
     Version 1.1.01
     -Converted checking trainer card into GUI
     -Began converting Battle into GUI format

@@ -15,6 +15,7 @@ public class Player{
         Pokemon party [] = new Pokemon [6];
         Pokemon storage [] = new Pokemon[120];
         Inventory inventory = new Inventory();
+        public Pokedex playerDex;
         public Scanner scan = new Scanner(System.in);
         public JButton back = new JButton("Back");
         public ActionHandler actionHandler;
@@ -27,15 +28,16 @@ public class Player{
             return party;
         }
 
-        public Player(String trainerName, int typ, Pokedex pokedex, Game game){
+        public Player(String trainerName, int typ, Game game){
             actionHandler = game.getActionHandler();
             back.addActionListener(actionHandler);
             back.setActionCommand("Back");
 
             name = trainerName;
+            playerDex = new Pokedex();
             Pokemon beginner = Pokemon.beginnerPokemon(typ - 1);
             party [0] = beginner;
-            pokedex.addPokemon(party[0].getPokeNum());
+            playerDex.addPokemon(party[0].getPokeNum());
             party[0].setExperience(0);
             party[0].setHealth(beginner.getHealthPoints());
             storage [0] = beginner;
@@ -194,7 +196,7 @@ public class Player{
 
         }
 
-        public void gainExperiencePokemon(int currentID, Pokedex pokedex){ //needs actual expMax calculations, needs changed in the event of multiple level ups at once, wont happen now cause set exp
+        public void gainExperiencePokemon(int currentID){ //needs actual expMax calculations, needs changed in the event of multiple level ups at once, wont happen now cause set exp
             if (party[currentID].getLevel() < 100){
                 party[currentID].setExperience(party[currentID].getExperience() + 100);
                 if (party[currentID].getExperience() >= toLevelUpPokemon){
@@ -220,7 +222,7 @@ public class Player{
                         party[currentID].setCurrentAtt(0);
                     }
                     party[currentID].setPokeNum(evolution.getPokeNum());
-                    pokedex.addPokemon(party[currentID].getPokeNum());
+                    this.playerDex.addPokemon(party[currentID].getPokeNum());
                     party[currentID].setEvolution(evolution.getEvolution());
                     party[currentID].setLevEv(evolution.getLevEv());
                     party[currentID].type = evolution.getElementType();

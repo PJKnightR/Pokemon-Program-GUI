@@ -25,12 +25,12 @@ public class Inventory {
         stackItem();
     }
 
-    public void addNewItem(Item i, Pokedex pokedex){
+    public void addNewItem(Item i){
         itemList.add(i);
         stackItem();
     }
 
-    public void useItem(Player user, Battle bat, Pokemon wild, Game game, Pokedex pokedex){ //need methods during and not during battle
+    public void useItem(Player user, Battle bat, Pokemon wild, Game game){ //need methods during and not during battle
         int position = 0;
         int caught;
         if (itemList.size() == 0){
@@ -44,7 +44,7 @@ public class Inventory {
             position = scan.nextInt();
             switch(position){
                 case -1:
-                    bat.playerPhase(user, game, pokedex);
+                    bat.playerPhase(user, game);
                     break;
                 case -2:
                     System.out.println("Enter the item number, not the item name!");
@@ -74,19 +74,19 @@ public class Inventory {
                         user.party[id].setExperience(0);
                         user.storage[id] = wild;
                         user.party[id].setHealth(user.party[id].getHealthPoints());
-                        pokedex.addPokemon(user.party[id].getPokeNum() + 1);
+                        user.playerDex.addPokemon(user.party[id].getPokeNum() + 1);
                         //PC.addPokemon(wild);
                         game.displayOptionsMenu();
                         break;
                     } else if (caught == -1) {
                         System.out.println(wild.getName() + " escaped the ball!");
-                        bat.wildAttack(user, game, pokedex);
+                        bat.wildAttack(user, game);
                     } else {
-                        bat.wildAttack(user, game, pokedex);
+                        bat.wildAttack(user, game);
                     }
             }
         }
-        bat.wildAttack(user, game, pokedex);
+        bat.wildAttack(user, game);
     }
 
     public void listItemsOutside(){
