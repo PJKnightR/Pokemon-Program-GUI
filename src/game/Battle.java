@@ -13,8 +13,8 @@ public class Battle{
     private JLabel encounterMsg = new JLabel();
     private JLabel sendOut = new JLabel();
     public ActionHandler actionHandler;
-    public JPanel contentPane = PokemonMain.contentPane;
-    public JFrame frame = PokemonMain.frame;
+    public JPanel contentPane;
+    public JFrame frame;
     public JButton cont3 = new JButton("Continue");
 
     public Battle(){
