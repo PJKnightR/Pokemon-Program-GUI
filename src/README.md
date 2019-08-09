@@ -3,7 +3,18 @@
 
     Version History Beta:
 
-    Version 1.1.02 The Grand Return and Cleanup Update
+    Version 1.2.1 8/9/19
+    -Added the old Battle & Game classes to the old package
+    -Added a check in battle so that you cannot send out a fainted Pokemon
+    -Added a new variable to Battle that keeps track of when a players Pokemon faints
+    -Added a method that allows the user to switch to a new Pokemon when one faints (if they have any more)
+    -Added temporary stat change variables in battle in preparation for their implementation in moves
+    -Added a variable to keep track of if an attack only effects stats in Attack as well as a get method for it
+    -Added variables for stat changing moves, recoil moves, and attack target to Attack and their get methods
+    -Re-Added awards from defeating Wild Pokemon in battles
+    -Fixed a bug not allowing you to take a turn when in battle
+
+    Version 1.2 8/7/19 The Grand Return and Cleanup Update
     -Added a variable in player for their Pokedex
     -Added a loop to game class to reduce method calls
     -Added poisoned and paralyzed status effects
@@ -11,19 +22,20 @@
     -Removed all unnecessary Pokedex calls in Battle, Player, Game, Shop, and Inventory
     -Removed unnecessary game calls from battle
     -Changed method names in Pokemon for simplification
+    -Created the old package for old code
     -Fixed a bug where Arbok's name was Ekans
 
-    Version 1.1.01
+    Version 1.1.1
     -Converted checking trainer card into GUI
     -Began converting Battle into GUI format
     -Fixed items breaking everything
 
-    Version 1.1.00
+    Version 1.1
     -Converted the Game class completely into GUI format
     -Enabled some classes that were disabled in the previous version
     -Began converting most major classes into GUI format
 
-    Version 1.0.00 5/11/2017
+    Version 1.0 5/11/2017
     -Beginning of GUI version based off of Version 0.67.00 alpha of the text-based Pokemon Program
     -Added the main game class and renamed it "Pokemon Main"
     -Added the options class and renamed it "Game" (This class will be responsible for most of the GUI)

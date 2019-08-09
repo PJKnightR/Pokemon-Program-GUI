@@ -8,8 +8,11 @@ public class Battle {
     private int currentID;
     private Pokemon enemy;
     private Scanner scan;
-    private int selectedMove, enemySelectedMove;
-    private boolean battling, enemyLoss, canRun, isPoisonedPlayer, isPoisonedEnemy, isParylizedPlayer, isParylizedEnemy;
+    private int selectedMove, enemySelectedMove, playerAtkChange, playerDefChange, playerSpAtkChange, playerSpDefChange,
+            playerSpdChange, enemyAtkChange, enemyDefChange, enemySpAtkChange, enemySpDefChange, enemySpdChange ;
+    private boolean battling, playerFaint, enemyFaint, canRun, isPoisonedPlayer, isPoisonedEnemy, isParylizedPlayer,
+            isParylizedEnemy, wildBattle, trainerBattle;
+    //add variables for the moves that raise and lower stats. Will be 0 by default
 
     public Battle(){
         isParylizedEnemy = false;
@@ -17,7 +20,18 @@ public class Battle {
         isPoisonedEnemy = false;
         isPoisonedPlayer = false;
         battling = true;
-        enemyLoss = false;
+        enemyFaint = false;
+        playerFaint = false;
+        playerAtkChange = 0;
+        playerDefChange = 0;
+        playerSpAtkChange = 0;
+        playerSpDefChange = 0;
+        playerSpdChange = 0;
+        enemyAtkChange = 0;
+        enemyDefChange = 0;
+        enemySpAtkChange = 0;
+        enemySpDefChange = 0;
+        enemySpdChange = 0;
     }
 
     public void startBattle(Player user, Scanner s, Boolean r){
@@ -25,7 +39,7 @@ public class Battle {
         this.enemy = Pokemon.wildPokemon(user);
         this.scan = s;
         canRun = r;
-        System.out.println("A wild " + enemy.getName() + " has appeared!");
+        System.out.println("A wild " + enemy.getName() + " has appeared! Go " + user.party[currentID].getName() + "!Game");
         while (user.party[currentID].getHealth() == 0 && !user.party[currentID].getName().equalsIgnoreCase("Empty")){
             currentID++;
         }
@@ -33,7 +47,7 @@ public class Battle {
     }
 
     public void doBattle(Player user){
-        while (battling && !enemyLoss){
+        while (battling && !enemyFaint && !playerFaint){
             if (isPoisonedPlayer){
                 if (getChance() > 50){
                     isPoisonedPlayer = false;
@@ -44,6 +58,7 @@ public class Battle {
                     battling = checkPlayerStatus(user);
                     if (!battling){
                         System.out.println("You were defeated by the " + enemy.getName() + "!");
+                        playerFaint = true;
                         break;
                     }
                 }
@@ -59,13 +74,20 @@ public class Battle {
                     battling = checkEnemyStatus();
                     if (!battling){
                         System.out.println("You defeated the " + enemy.getName() + "!");
-                        enemyLoss = true;
+                        enemyFaint = true;
                         break;
                     }
                 }
             }
 
             if (battling){
+
+                playerMove(user);
+                if (selectedMove == -1){
+                    break;
+                }
+                enemyMove();
+
                 if(isParylizedPlayer){
                     if (getChance() > 50){
                         isParylizedPlayer = false;
@@ -80,7 +102,7 @@ public class Battle {
                     }
                 }
 
-                if (user.party[currentID].getSpeed() >= enemy.getSpeed()){
+                if (user.party[currentID].getSpeed() + playerSpdChange >= enemy.getSpeed() + enemySpdChange){
                     if(isParylizedPlayer){
                         if(getChance() > 50){
                             System.out.println("You are paralyzed but managed to move");
@@ -103,7 +125,7 @@ public class Battle {
                             playerDamageStep(user);
                         }
                     }
-                } else if (user.party[currentID].getSpeed() < enemy.getSpeed()){
+                } else if (user.party[currentID].getSpeed() + playerSpdChange < enemy.getSpeed() + enemySpdChange){
                     if(isParylizedEnemy){
                         if(getChance() > 50){
                             System.out.println("The enemy is paralyzed but managed to attack!");
@@ -131,8 +153,10 @@ public class Battle {
             }
         }
 
-        if(enemyLoss){
-            battleEnd(user);
+        if(playerFaint){
+            playerFaint(user);
+        } else if(enemyFaint){
+            enemyFaint(user);
         }
     }
 
@@ -140,7 +164,8 @@ public class Battle {
         user.party[currentID].setHealthLeft((int)user.party[currentID].getHealthLeft() - enemyAttack(user));
         battling = checkPlayerStatus(user);
         if (!battling){
-            System.out.println("You were defeated by the " + enemy.getName() + "!");
+            System.out.println(user.party[currentID].getName() + " fainted!");
+            playerFaint = true;
         }
     }
 
@@ -148,37 +173,33 @@ public class Battle {
         enemy.setHealthLeft((int)enemy.getHealthLeft() - playerAttack(user));
         battling = checkEnemyStatus();
         if (!battling){
-            System.out.println("You defeated the " + enemy.getName() + "!");
-            enemyLoss = true;
+            System.out.println("The " + enemy.getName() + " fainted!");
+            enemyFaint = true;
         }
     }
 
-    public void battleEnd(Player user){
+    public void playerFaint(Player user){
+        if(user.party[0].getHealthLeft() != 0 || user.party[1].getHealthLeft() != 0 || user.party[2].getHealthLeft() != 0 ||
+                user.party[3].getHealthLeft() != 0 || user.party[4].getHealthLeft() != 0 || user.party[5].getHealthLeft() != 0){
+            selectPokemon(user);
+            doBattle(user);
+        }
+    }
+
+    public void enemyFaint(Player user){
+        //a check for if there were multiple pokemon being fought. ie double or trainer battles
         double itemChance;
 
         itemChance = getChance();
         if (itemChance > 50){
             user.getInventory().addRandomItem();
         }
-        /*
-        if (enemy.getDifficulty().equalsIgnoreCase("easy")){
-            PC.gainExp(50 + (int)getChance());
-            PC.gainGold(100 + (int)getChance());
-        } else if (enemy.getDifficulty().equalsIgnoreCase("moderate")){
-            PC.gainExp(100 + (int)getChance());
-            PC.gainGold(150 + (int)getChance());
-        } else if (enemy.getDifficulty().equalsIgnoreCase("hard")){
-            PC.gainExp(250 + (int)getChance());
-            PC.gainGold(200 + (int)getChance());
-        } else {
-            PC.gainExp(100);
-            PC.gainGold(100);
-        }*/
-        System.out.print("!\n");
+        System.out.println("You gained 50 exp, 100 pokemon exp, and 100 pokedollars!"); //currently constant,change later to depend of the pokemon
+        user.gainExperience();
+        user.gainPokedollars();
+        user.gainEVs(currentID, enemy.getAtkEVG(), enemy.getDefEVG(), enemy.getSpAtkEVG(), enemy.getSpDefEVG(), enemy.getSpdEVG(), enemy.getHpEVG());
+        user.gainExperiencePokemon(currentID);
 
-        //if(user.checkLevelUp()){
-          //  user.levelUp();
-        //}
     }
 
     public void playerMove(Player user){
@@ -198,7 +219,7 @@ public class Battle {
                 user.getInventory().useItem(user,this, enemy);
             } else if(move.equals("3")){
                 action = selectPokemon(user);
-                System.out.println("What would you like to do?\n 1. Fight\n 2. Use an item\n 3. View Your Stats\n 4. Run");
+                System.out.println("What would you like to do?\n 1. Fight\n 2. Inventory\n 3. Pokemon\n 4. Run");
             } else if (move.equals("4")){
                 action = true;
                 this.selectedMove = 0;
@@ -246,6 +267,8 @@ public class Battle {
                 if (s == currentID + 1){
                     System.out.println("That Pokemon is already in battle!");
                     optionPokemon(s,user);
+                } else if (user.party[s - 1].getHealthLeft() == 0){
+                    System.out.println("This Pokemon is fainted and cannot battle!");
                 } else {
                     System.out.println("That's enough " + user.party[currentID].getName() + "!");
                     currentID = s - 1;
@@ -407,10 +430,10 @@ public class Battle {
         }
 
         if (user.party[currentID].att[att].isPhysical()){
-            damage = (2 * user.party[currentID].getLevel() + 10) / 250 * (user.party[currentID].getAttack() / enemy.getDefense()) * (user.party[currentID].att[att].getPower() + 2) * multiplier;
+            damage = (2 * user.party[currentID].getLevel() + 10) / 250 * ((user.party[currentID].getAttack() + playerAtkChange) / (enemy.getDefense() + enemyDefChange)) * (user.party[currentID].att[att].getPower() + 2) * multiplier;
             d = (int) damage;
         } else {
-            damage = ((2 * user.party[currentID].getLevel() + 10) / 250) * (user.party[currentID].getSpecialAttack() / enemy.getSpecialDefense()) * (user.party[currentID].att[att].getPower() + 2) * multiplier;
+            damage = ((2 * user.party[currentID].getLevel() + 10) / 250) * ((user.party[currentID].getSpecialAttack() + playerSpAtkChange) / (enemy.getSpecialDefense() + enemySpDefChange)) * (user.party[currentID].att[att].getPower() + 2) * multiplier;
             d = (int) damage;
         }
 
@@ -454,9 +477,9 @@ public class Battle {
         multiplier = getModifier();
 
         if (enemy.att[att].isPhysical()){
-            damage = ((2 * enemy.getLevel() + 10) / 250) * (enemy.getAttack() / user.party[0].getDefense()) * (enemy.att[att].getPower() + 2) * multiplier;
+            damage = ((2 * enemy.getLevel() + 10) / 250) * ((enemy.getAttack() + enemyAtkChange) / (user.party[0].getDefense() + playerDefChange)) * (enemy.att[att].getPower() + 2) * multiplier;
         } else {
-            damage = ((2 * enemy.getLevel() + 10) / 250) * (enemy.getSpecialAttack() / user.party[0].getSpecialDefense()) * (enemy.att[att].getPower() + 2) * multiplier;
+            damage = ((2 * enemy.getLevel() + 10) / 250) * ((enemy.getSpecialAttack() + enemySpAtkChange) / (user.party[0].getSpecialDefense() + playerSpDefChange)) * (enemy.att[att].getPower() + 2) * multiplier;
         }
         damage = (int) Math.round(damage);
         System.out.println("It did " + damage + " damage");
