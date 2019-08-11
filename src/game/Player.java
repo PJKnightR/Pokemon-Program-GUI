@@ -15,7 +15,6 @@ public class Player{
         public Pokedex playerDex;
         public Scanner scan = new Scanner(System.in);
         public JButton back = new JButton("Back");
-        public ActionHandler actionHandler;
 
         public Inventory getInventory(){
             return inventory;
@@ -25,9 +24,7 @@ public class Player{
             return party;
         }
 
-        public Player(String trainerName, int typ, Game game){
-            actionHandler = game.getActionHandler();
-            //back.addActionListener(actionHandler);
+        public Player(String trainerName, int typ){
             back.setActionCommand("Back");
 
             name = trainerName;

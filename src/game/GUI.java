@@ -52,7 +52,7 @@ public class GUI {
                 type=2;
             if(type!=-1) {
                 Type.initializeTypes();
-                menu(new Player(name.getText(), type, new Game()));
+                menu(new Player(name.getText(), type));
             }
         });
 
@@ -86,37 +86,44 @@ public class GUI {
         frame.add(cp);
     }
 
+    private void menu(Player player){
+        JPanel cp = new JPanel();
+        JLabel option = new JLabel ("What would you like to do, " + player.getName() + "?");
+        GridBagConstraints c = new GridBagConstraints();
+        JButton explore = new JButton("Explore"), party = new JButton("Party"), info = new JButton("Trainer Info"), bag = new JButton("Inventory"), dex = new JButton("Pokedex"),
+                save = new JButton("Save"), quit = new JButton("Quit");
 
-    private void menu(Player player){ //TODO: Make this menu
-        JLabel option = new JLabel ("What would you like to do?");
+        cp.setLayout(new GridBagLayout());
+        explore.addActionListener((ActionEvent arg0) -> {
+            //Code and such
 
-        /*
-        explore.addActionListener(actionHandler);
-        explore.setActionCommand("Explore");
-        party.addActionListener(actionHandler);
-        party.setActionCommand("Party");
-        info.addActionListener(actionHandler);
-        info.setActionCommand("Trainer Info");
-        bag.addActionListener(actionHandler);
-        bag.setActionCommand("Inventory");
-        dex.addActionListener(actionHandler);
-        dex.setActionCommand("Pokedex");
-        save.addActionListener(actionHandler);
-        save.setActionCommand("Save");
-        quit.addActionListener(actionHandler);
-        quit.setActionCommand("Quit");
-        cont2.addActionListener(actionHandler);
-        cont2.setActionCommand("Continue2"); */
+            //Eventually, we need to return to this menu, this means that, by design, all GUI actions are in this class and all logic actions are handled elsewhere
+            menu(player);
+        });
+        quit.addActionListener((ActionEvent arg0) -> System.exit(0));
 
-
-
-
-      //
-
-
-
-
-        frame.setContentPane(new JPanel());
+        c.insets=new Insets(5,10,5,10);
+        c.gridwidth=2;
+        cp.add(option,c);
+        c.gridwidth=1;
+        c.gridy=1;
+        cp.add(explore,c);
+        c.gridy=2;
+        cp.add(party,c);
+        c.gridy=3;
+        cp.add(info,c);
+        c.gridy=1;
+        c.gridx=1;
+        cp.add(bag,c);
+        c.gridy=2;
+        cp.add(dex,c);
+        c.gridy=3;
+        cp.add(save,c);
+        c.gridwidth=2;
+        c.gridx=0;
+        c.gridy=4;
+        cp.add(quit,c);
+        frame.setContentPane(cp);
         frame.setVisible(true);
     }
 }
