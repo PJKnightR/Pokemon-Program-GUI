@@ -1,10 +1,12 @@
 package game;
 
+import shop.ShopMart;
 import type.Type;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Random;
 
 public class GUI {
     private JFrame frame = new JFrame("Pokemon Program");
@@ -22,14 +24,13 @@ public class GUI {
 
 
     private void initPlayer(){
-        JPanel cp = new JPanel();
         JLabel welcomeMsg = new JLabel ("<html><center>Welcome to the world of Pokemon.<br>I am the Pokemon Professor Oak.<br>Before we begin can you tell us your name and what Pokemon you would like to start with?</center></html>"), error = new JLabel("error");
-        JTextField name = new JTextField("Enter your name", 15);
         JCheckBox squirt = new JCheckBox("Squirtle"), bulb = new JCheckBox("Bulbasaur"), charm = new JCheckBox("Charmander"), pika = new JCheckBox("Pikachu");
-        JButton submit = new JButton("Start your Adventure!");
-        GridBagConstraints c = new GridBagConstraints();
-        ButtonGroup bg = new ButtonGroup();
-
+        var cp = new JPanel();
+        var name = new JTextField("Enter your name", 15);
+        var submit = new JButton("Start your Adventure!");
+        var c = new GridBagConstraints();
+        var bg = new ButtonGroup();
 
         cp.setLayout(new GridBagLayout());
         bg.add(squirt);
@@ -38,8 +39,8 @@ public class GUI {
         bg.add(charm);
         error.setVisible(false);
 
-        submit.addActionListener((ActionEvent arg0) -> {
-            int type = -1;
+        submit.addActionListener((var arg0) -> {
+            var type = -1;
             if(bg.getSelection() == null)
                 error.setVisible(true);
             else if(squirt.isSelected())
@@ -86,21 +87,71 @@ public class GUI {
         frame.add(cp);
     }
 
+    private void explore(){
+        var rand = new Random().nextInt(100);
+
+        if(rand <= 75){
+            //Battle
+        } else {
+            event();
+        }
+    }
+
+    private void event(){
+        var rand = new Random().nextInt(6);
+
+        switch (rand){
+            case 1 -> {}
+                /*
+                location = new JLabel("You found a mart!");
+                Shop shop = new ShopMart();
+                shop.shop(user, this);
+                break; */
+            case 2 -> {}
+                /*
+                System.out.println("You found a forest!");
+                user.getInventory().addRandomItem();
+                break; */
+            case 3 -> {}
+                /*
+                System.out.println("You found a cave!");
+                user.getInventory().addRandomItem();
+                break; */
+            case 4 -> {}
+                /*
+                System.out.println("You found a river!");
+                user.getInventory().addRandomItem();
+                break; */
+            case 5 -> {}
+                /*
+                location = new JLabel("You found a Pokemon Center!\nYour party was fully healed");
+                // user.healAll();
+                break; */
+            case 6 -> {}
+                /*
+                System.out.println("You found a lake!");
+                user.getInventory().addRandomItem();
+                break; */
+        }
+    }
+
+
+
     private void menu(Player player){
-        JPanel cp = new JPanel();
-        JLabel option = new JLabel ("What would you like to do, " + player.getName() + "?");
-        GridBagConstraints c = new GridBagConstraints();
         JButton explore = new JButton("Explore"), party = new JButton("Party"), info = new JButton("Trainer Info"), bag = new JButton("Inventory"), dex = new JButton("Pokedex"),
                 save = new JButton("Save"), quit = new JButton("Quit");
+        var cp = new JPanel();
+        var option = new JLabel ("What would you like to do, " + player.getName() + "?");
+        var c = new GridBagConstraints();
 
         cp.setLayout(new GridBagLayout());
-        explore.addActionListener((ActionEvent arg0) -> {
-            //Code and such
+        explore.addActionListener((var arg0) -> {
+            explore();
 
-            //Eventually, we need to return to this menu, this means that, by design, all GUI actions are in this class and all logic actions are handled elsewhere
+            //TODO: Eventually, we need to return to this menu, this means that, by design, all GUI actions are in this class and all logic actions are handled elsewhere
             menu(player);
         });
-        quit.addActionListener((ActionEvent arg0) -> System.exit(0));
+        quit.addActionListener((var arg0) -> System.exit(0));
 
         c.insets=new Insets(5,10,5,10);
         c.gridwidth=2;

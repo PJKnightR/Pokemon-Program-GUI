@@ -15,7 +15,8 @@ public class PokemonMain {
 
     public static void startGUI(){
         JFrame.setDefaultLookAndFeelDecorated(false);
-        GUI g = new GUI();
+
+        new GUI();
     }
 
 
